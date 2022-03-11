@@ -8,6 +8,8 @@ module.exports = app => {
     // 1.6
     const User = require('../../models/User')  // !!!
     // 1.5 这里我们会涉及到把数据存进去，因此需要数据库
+
+    // 添加用户
     router.post('/users', async (req, res) => {
         // 1.7 引入User后，继续把数据存进去（下面要想使用的话，需要添加await）
         const model = await User.create(req.body)// 定义一个model
@@ -15,10 +17,23 @@ module.exports = app => {
         res.send(model)
     })
     
+    // 获取用户列表
     router.get('/users', async (req, res) => {
         const items = await User.find().limit(10)  // !!!
         res.send(items)
-   })
+    })
+
+    // 获取当前编辑的数据到表单中
+    router.get('/users/:id', async (req, res) => {
+        const model = await User.findById(req.params.id)
+        res.send(model)
+    })
+    
+    // 编辑用户
+    router.put('/users/:id', async (req, res) => {
+        const model = await User.findByIdAndUpdate(req.params.id, req.body)
+        res.send(model)
+    })
     // 1.4 将子路由挂载到这个地方，不然每次写路由都要加上/admin/api很麻烦
     app.use('/admin/api', router)
 }
