@@ -34,6 +34,14 @@ module.exports = app => {
         const model = await User.findByIdAndUpdate(req.params.id, req.body)
         res.send(model)
     })
+
+    // 删除用户
+    router.delete('/users/:id', async (req, res) => {
+        await User.findByIdAndDelete(req.params.id, req.body)
+        res.send({
+            success: true
+        })
+    })
     // 1.4 将子路由挂载到这个地方，不然每次写路由都要加上/admin/api很麻烦
     app.use('/admin/api', router)
 }
