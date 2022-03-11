@@ -13,7 +13,12 @@ module.exports = app => {
         const model = await User.create(req.body)// 定义一个model
         // 1.8 发回客户端，让它知道我们创建完成了，以及创建的数据是什么
         res.send(model)
-    }) 
+    })
+    
+    router.get('/users', async (req, res) => {
+        const items = await User.find().limit(10)  // !!!
+        res.send(items)
+   })
     // 1.4 将子路由挂载到这个地方，不然每次写路由都要加上/admin/api很麻烦
     app.use('/admin/api', router)
 }
