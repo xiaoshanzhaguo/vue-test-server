@@ -11,10 +11,21 @@ module.exports = app => {
 
     // 添加用户
     router.post('/users', async (req, res) => {
-        // 1.7 引入User后，继续把数据存进去（下面要想使用的话，需要添加await）
-        const model = await User.create(req.body) // 定义一个model
-        // 1.8 发回客户端，让它知道我们创建完成了，以及创建的数据是什么
-        res.send(model)
+        // 查询用户名是否存在.
+        const user = await User.findOne({
+            username: req.body.username
+        })
+
+        if (user) {
+            return res.status(422).send({
+                message: '用户名已存在'
+            })
+        } else {
+            // 1.7 引入User后，继续把数据存进去（下面要想使用的话，需要添加await）
+            const model = await User.create(req.body) // 定义一个model
+            // 1.8 发回客户端，让它知道我们创建完成了，以及创建的数据是什么
+            res.send(model)
+        }
     })
 
     // 获取用户列表
