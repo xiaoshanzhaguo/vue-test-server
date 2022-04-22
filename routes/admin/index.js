@@ -11,21 +11,10 @@ module.exports = app => {
 
     // 添加用户
     router.post('/users', async (req, res) => {
-        // 查询用户名是否存在.
-        const user = await User.findOne({
-            username: req.body.username
-        })
-
-        if (user) {
-            return res.status(422).send({
-                message: '用户名已存在'
-            })
-        } else {
-            // 1.7 引入User后，继续把数据存进去（下面要想使用的话，需要添加await）
-            const model = await User.create(req.body) // 定义一个model
-            // 1.8 发回客户端，让它知道我们创建完成了，以及创建的数据是什么
-            res.send(model)
-        }
+        // 1.7 引入User后，继续把数据存进去（下面要想使用的话，需要添加await）
+        const model = await User.create(req.body) // 定义一个model
+        // 1.8 发回客户端，让它知道我们创建完成了，以及创建的数据是什么
+        res.send(model)
     })
 
     // 获取用户列表
@@ -54,7 +43,7 @@ module.exports = app => {
         })
     })
 
-    // 查找用户
+    // 模糊查找用户
     router.get('/user/:username', async (req, res) => {
         var username = req.params.username;
         // 正则匹配 i忽略大小写
@@ -63,6 +52,14 @@ module.exports = app => {
             username: {
                 $regex: reg
             }
+        })
+        res.send(model)
+    })
+
+    // 精确查找用户
+    router.get('/aUser/:username', async (req, res) => {
+        const model = await User.findOne({
+            username: req.params.username
         })
         res.send(model)
     })

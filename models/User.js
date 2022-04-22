@@ -31,6 +31,9 @@ const schema = new moogose.Schema({
     icon: {
         type: String,
         default: "iconfont icon-eye-none"
+    },
+    email: {
+        type: String
     }
 })
 
