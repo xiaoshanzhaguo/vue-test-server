@@ -95,8 +95,14 @@ module.exports = app => {
         if (!user) {
             /* ！！！ 设置状态码，并发送一段数据。平时我们是直接res.send发送，下面的写法表示的是适龄状态码再发送，
             这样客户端至少知道不是正常的200，不是一个普通正常的请求。（这里去查看network，发现状态码422，返回用户名不存在） */
-            return res.status(422).send({
-                message: '用户不存在' // 有了这个消息，前端就能把它显示出来（去http里全局捕获）
+            // return res.status(422).send({
+            //     message: '用户不存在' // 有了这个消息，前端就能把它显示出来（去http里全局捕获）
+            // })
+
+            // 修改提示方式
+            const userMessage = false;
+            return res.send({
+                userMessage
             })
         }
 
@@ -107,8 +113,14 @@ module.exports = app => {
         const isValid = require('bcryptjs').compareSync(password, user.password) // 因此之前在模型里设置了select: false，因此默认是取不到值的。
         if (!isValid) {
             // 统一422表示客户端提交的数据有问题，验证错误，当然你也可以用400或者别的，只不过老师习惯用422。在resForm规范里，也有建议用422的
-            return res.status(422).send({
-                message: '密码错误'
+            // return res.status(422).send({
+            //     message: '密码错误'
+            // })
+
+            // 修改提示方式
+            const pwdMessage = false;
+            return res.send({
+                pwdMessage
             })
         }
 
